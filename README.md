@@ -19,7 +19,7 @@
 
 ```bash
 # 克隆代码库
-git clone https://github.com/kunyu/kunyu-lang.git
+git clone https://github.com/your-username/kunyu-lang.git
 cd kunyu-lang
 
 # 编译
@@ -208,5 +208,5 @@ MIT License
 
 ## 联系方式
 
-- 项目主页: [https://github.com/kunyu/kunyu-lang](https://github.com/kunyu/kunyu-lang)
-- 作者邮箱: aaa137565@outlook.com
+- 项目主页: [https://github.com/your-username/kunyu-lang](https://github.com/your-username/kunyu-lang)
+- 作者邮箱: your.email@example.com 
