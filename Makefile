@@ -33,11 +33,11 @@ clean:
 
 # 运行测试示例
 test: $(BIN)
-	$(BIN) hello.kunyu
+	$(BIN) examples/hello.kunyu
 
 # 调试运行模式
 debug: $(BIN)
-	$(BIN) -d hello.kunyu
+	$(BIN) -d examples/hello.kunyu
 
 # 运行交互式REPL
 repl: $(BIN)

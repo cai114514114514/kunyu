@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -31,48 +32,6 @@ static void setup_console_utf8() {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 #endif
-}
-
-/**
- * 打印一个对象的字符串表示
- */
-static void print_object(PyObject *obj) {
-    if (obj == NULL) {
-        printf("null\n");
-        return;
-    }
-    
-    switch (obj->type) {
-        case TYPE_NUMBER: {
-            PyNumberObject *num = (PyNumberObject *)obj;
-            // 检查是否为整数
-            double intpart;
-            if (modf(num->value, &intpart) == 0.0) {
-                printf("%.0f\n", num->value);
-            } else {
-                printf("%g\n", num->value);
-            }
-            break;
-        }
-        case TYPE_STRING: {
-            PyStringObject *str = (PyStringObject *)obj;
-            printf("\"%s\"\n", str->value);
-            break;
-        }
-        case TYPE_LIST: {
-            PyListObject *list = (PyListObject *)list;
-            printf("[列表，长度: %zu]\n", py_list_length(obj));
-            break;
-        }
-        case TYPE_DICT: {
-            PyDictObject *dict = (PyDictObject *)dict;
-            printf("[字典，大小: %zu]\n", py_dict_size(obj));
-            break;
-        }
-        default:
-            printf("[对象]\n");
-            break;
-    }
 }
 
 /**
