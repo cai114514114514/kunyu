@@ -33,7 +33,7 @@ clean:
 
 # 运行测试示例
 test: $(BIN)
-	$(BIN) hello.kunyu
+	for f in examples/*.kunyu; do $(BIN) $$f >/dev/null || exit 1; done
 
 # 调试运行模式
 debug: $(BIN)

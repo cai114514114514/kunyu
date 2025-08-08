@@ -60,13 +60,13 @@ static void print_object(PyObject *obj) {
             break;
         }
         case TYPE_LIST: {
-            PyListObject *list = (PyListObject *)list;
-            printf("[列表，长度: %zu]\n", py_list_length(obj));
+            PyListObject *list = (PyListObject *)obj;
+            printf("[列表，长度: %zu]\n", py_list_length(list));
             break;
         }
         case TYPE_DICT: {
-            PyDictObject *dict = (PyDictObject *)dict;
-            printf("[字典，大小: %zu]\n", py_dict_size(obj));
+            PyDictObject *dict = (PyDictObject *)obj;
+            printf("[字典，大小: %zu]\n", py_dict_size(dict));
             break;
         }
         default:
