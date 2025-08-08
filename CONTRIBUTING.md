@@ -9,8 +9,8 @@
 3. Fork本项目到您的GitHub账户。
 4. 克隆您的fork到本地：
    ```bash
-   git clone https://github.com/your-username/kunyu-lang.git
-   cd kunyu-lang
+   git clone https://github.com/your-username/kunyu.git
+   cd kunyu
    ```
 5. 创建一个新分支进行您的更改：
    ```bash

@@ -20,7 +20,7 @@
 ```bash
 # 克隆代码库
 git clone https://github.com/cai114514114514/kunyu.git
-cd kunyu-lang
+cd kunyu
 
 # 编译
 make
