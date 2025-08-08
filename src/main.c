@@ -16,9 +16,7 @@
 
 // 函数声明
 struct AstNode* parser_parse(Token *tokens, size_t token_count);
-KunyuError* parser_get_error();
 bool interpreter_execute(AstNode *root);
-KunyuError* interpreter_get_error();
 
 /**
  * 命令行选项
@@ -201,10 +199,10 @@ static const char* token_type_str(KunyuTokenType type) {
  * @param token 标记指针
  */
 static void print_token(const Token *token) {
-    printf("%-10s | %-10s | 行 %-4d | 列 %-4d\n", 
-           token_type_str(token->type), 
-           token->value, 
-           token->line, 
+    printf("%-10s | %-10s | 行 %-4d | 列 %-4d\n",
+           token_type_str(token->type),
+           token->value ? token->value : "",
+           token->line,
            token->column);
 }
 

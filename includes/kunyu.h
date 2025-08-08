@@ -6,6 +6,10 @@
 #ifndef KUNYU_H
 #define KUNYU_H
 
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -245,6 +249,11 @@ void builtins_init();
 void builtins_cleanup();
 PyObject* builtins_call(const char *name, PyObject **args, int arg_count);
 bool builtins_is_builtin(const char *name);
+
+/**
+ * 语法分析器接口
+ */
+KunyuError* parser_get_error();
 
 /**
  * REPL接口
