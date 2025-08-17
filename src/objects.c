@@ -8,6 +8,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+// 为了兼容C99标准，定义strdup函数（如果不存在）
+#ifndef _GNU_SOURCE
+static char *kunyu_strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *dup = malloc(len);
+    if (dup) {
+        memcpy(dup, s, len);
+    }
+    return dup;
+}
+#define strdup kunyu_strdup
+#endif
+
 /**
  * 销毁数字对象
  */
@@ -157,6 +170,11 @@ bool py_list_append(PyObject *list, PyObject *item) {
     
     // 检查是否需要扩容
     if (list_obj->length >= list_obj->capacity) {
+        // 防止整数溢出
+        if (list_obj->capacity > SIZE_MAX / 2 / sizeof(PyObject *)) {
+            return false;
+        }
+        
         size_t new_capacity = list_obj->capacity * 2;
         PyObject **new_items = (PyObject **)realloc(list_obj->items, sizeof(PyObject *) * new_capacity);
         if (new_items == NULL) {

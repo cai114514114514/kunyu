@@ -190,6 +190,7 @@ size_t lexer_get_token_count();
  */
 struct AstNode* parser_parse(Token *tokens, size_t token_count);
 void parser_free(struct AstNode *node);
+KunyuError* parser_get_error();
 
 /**
  * 编译器接口

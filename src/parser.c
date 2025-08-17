@@ -9,6 +9,19 @@
 #include <string.h>
 #include <stdbool.h>
 
+// 为了兼容C99标准，定义strdup函数（如果不存在）
+#ifndef _GNU_SOURCE
+static char *kunyu_strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *dup = malloc(len);
+    if (dup) {
+        memcpy(dup, s, len);
+    }
+    return dup;
+}
+#define strdup kunyu_strdup
+#endif
+
 /**
  * 语法分析器上下文
  */
