@@ -3,6 +3,7 @@
  * 提供基本的内置函数和数据结构操作
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include <stdio.h>
 #include <stdlib.h>

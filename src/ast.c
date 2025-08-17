@@ -2,6 +2,7 @@
  * 坤舆编程语言 - 抽象语法树节点实现
  */
 
+#define _GNU_SOURCE
 #include "../includes/ast.h"
 #include <stdlib.h>
 #include <string.h>

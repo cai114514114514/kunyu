@@ -3,12 +3,14 @@
  * 提供读取-求值-打印-循环的交互式环境
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include "../includes/ast.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -128,14 +130,16 @@ static bool execute_and_print(const char *source) {
     // 如果是表达式，添加输出语句
     if (is_expression) {
         // 创建新的源代码，添加输出语句
-        char *new_source = (char *)malloc(strlen(source) + 10);
+        size_t source_len = strlen(source);
+        size_t new_source_len = source_len + 10; // "输出 " + source + ";"
+        char *new_source = (char *)malloc(new_source_len);
         if (new_source == NULL) {
             fprintf(stderr, "错误: 内存分配失败\n");
             lexer_free();
             return false;
         }
         
-        sprintf(new_source, "输出 %s;", source);
+        snprintf(new_source, new_source_len, "输出 %s;", source);
         
         // 使用新的源代码重新进行词法分析
         lexer_free();

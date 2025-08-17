@@ -3,6 +3,7 @@
  * 直接执行抽象语法树
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include "../includes/ast.h"
 #include <stdio.h>
@@ -701,12 +702,23 @@ static PyObject* eval_binary_expr(BinaryExpr *expr) {
         char *left_str = object_to_string(left);
         char *right_str = object_to_string(right);
         
-        size_t result_len = strlen(left_str) + strlen(right_str) + 1;
+        if (left_str == NULL || right_str == NULL) {
+            interpreter.error.code = KUNYU_ERROR_MEMORY;
+            snprintf(interpreter.error.message, sizeof(interpreter.error.message), 
+                     "字符串转换失败");
+            py_decref(left);
+            py_decref(right);
+            return NULL;
+        }
+        
+        size_t left_len = strlen(left_str);
+        size_t right_len = strlen(right_str);
+        size_t result_len = left_len + right_len + 1;
         char *result_str = (char *)malloc(result_len);
         
         if (result_str != NULL) {
-            strcpy(result_str, left_str);
-            strcat(result_str, right_str);
+            memcpy(result_str, left_str, left_len);
+            memcpy(result_str + left_len, right_str, right_len + 1);
             result = create_string_object(result_str);
             free(result_str);
         }

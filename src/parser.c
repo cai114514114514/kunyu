@@ -3,6 +3,7 @@
  * 将标记流转换为抽象语法树
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include "../includes/ast.h"
 #include <stdlib.h>

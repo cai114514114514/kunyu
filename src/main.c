@@ -131,8 +131,15 @@ static char* read_file(const char *filename) {
     long size = ftell(file);
     fseek(file, 0, SEEK_SET);
     
+    // 检查文件大小是否合理
+    if (size < 0 || size > SIZE_MAX - 1) {
+        fprintf(stderr, "错误: 文件大小无效或过大\n");
+        fclose(file);
+        return NULL;
+    }
+    
     // 分配内存
-    char *buffer = (char *)malloc(size + 1);
+    char *buffer = (char *)malloc((size_t)size + 1);
     if (buffer == NULL) {
         fprintf(stderr, "错误: 内存分配失败\n");
         fclose(file);
@@ -140,8 +147,8 @@ static char* read_file(const char *filename) {
     }
     
     // 读取文件内容
-    size_t read_size = fread(buffer, 1, size, file);
-    if (read_size != size) {
+    size_t read_size = fread(buffer, 1, (size_t)size, file);
+    if (read_size != (size_t)size) {
         fprintf(stderr, "警告: 读取文件大小与预期不符\n");
     }
     
