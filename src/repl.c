@@ -128,14 +128,16 @@ static bool execute_and_print(const char *source) {
     // 如果是表达式，添加输出语句
     if (is_expression) {
         // 创建新的源代码，添加输出语句
-        char *new_source = (char *)malloc(strlen(source) + 10);
+        size_t new_len = strlen(source) + 10; /* 额外空间用于 "输出 "、分号及终止符 */
+        char *new_source = (char *)malloc(new_len);
         if (new_source == NULL) {
             fprintf(stderr, "错误: 内存分配失败\n");
             lexer_free();
             return false;
         }
         
-        sprintf(new_source, "输出 %s;", source);
+        /* 使用 snprintf 防止潜在的缓冲区溢出 */
+        snprintf(new_source, new_len, "输出 %s;", source);
         
         // 使用新的源代码重新进行词法分析
         lexer_free();

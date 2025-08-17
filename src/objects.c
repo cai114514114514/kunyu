@@ -266,6 +266,15 @@ static int py_dict_find_index(PyDictObject *dict, PyObject *key) {
             if (strcmp(str_key->value, dict_key->value) == 0) {
                 return i;
             }
+        } else {
+            /* For non-string keys, fall back to pointer equivalence so duplicate
+             * insertions do not create multiple entries referring to the same
+             * object. This prevents unbounded growth of the dictionary when the
+             * language allows objects other than strings to be used as keys.
+             */
+            if (key == dict->items[i].key) {
+                return i;
+            }
         }
     }
     return -1;

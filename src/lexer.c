@@ -211,21 +211,25 @@ static void skip_comment() {
  * 判断是否是字母或下划线
  */
 static bool is_alpha(char c) {
-    return isalpha(c) || c == '_';
+    /* cast to unsigned char to avoid undefined behavior when c is negative */
+    unsigned char uc = (unsigned char)c;
+    return isalpha(uc) || uc == '_';
 }
 
 /**
  * 判断是否是数字
  */
 static bool is_digit(char c) {
-    return isdigit(c);
+    unsigned char uc = (unsigned char)c;
+    return isdigit(uc);
 }
 
 /**
  * 判断是否是字母、数字或下划线
  */
 static bool is_alnum(char c) {
-    return isalnum(c) || c == '_';
+    unsigned char uc = (unsigned char)c;
+    return isalnum(uc) || uc == '_';
 }
 
 /**
