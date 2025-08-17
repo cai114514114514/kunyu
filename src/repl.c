@@ -5,6 +5,7 @@
 
 #include "../includes/kunyu.h"
 #include "../includes/ast.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,47 +34,7 @@ static void setup_console_utf8() {
 #endif
 }
 
-/**
- * 打印一个对象的字符串表示
- */
-static void print_object(PyObject *obj) {
-    if (obj == NULL) {
-        printf("null\n");
-        return;
-    }
-    
-    switch (obj->type) {
-        case TYPE_NUMBER: {
-            PyNumberObject *num = (PyNumberObject *)obj;
-            // 检查是否为整数
-            double intpart;
-            if (modf(num->value, &intpart) == 0.0) {
-                printf("%.0f\n", num->value);
-            } else {
-                printf("%g\n", num->value);
-            }
-            break;
-        }
-        case TYPE_STRING: {
-            PyStringObject *str = (PyStringObject *)obj;
-            printf("\"%s\"\n", str->value);
-            break;
-        }
-        case TYPE_LIST: {
-            PyListObject *list = (PyListObject *)list;
-            printf("[列表，长度: %zu]\n", py_list_length(obj));
-            break;
-        }
-        case TYPE_DICT: {
-            PyDictObject *dict = (PyDictObject *)dict;
-            printf("[字典，大小: %zu]\n", py_dict_size(obj));
-            break;
-        }
-        default:
-            printf("[对象]\n");
-            break;
-    }
-}
+/* Removed unused print_object to reduce redundancy; exec_print_stmt in interpreter handles printing */
 
 /**
  * 执行表达式并打印结果
@@ -128,14 +89,19 @@ static bool execute_and_print(const char *source) {
     // 如果是表达式，添加输出语句
     if (is_expression) {
         // 创建新的源代码，添加输出语句
-        char *new_source = (char *)malloc(strlen(source) + 10);
+        const char *prefix = "输出 ";
+        const char suffix = ';';
+        size_t prefix_len = strlen(prefix);
+        size_t source_len = strlen(source);
+        size_t total_len = prefix_len + source_len + 1 /* suffix */ + 1 /* NUL */;
+        char *new_source = (char *)malloc(total_len);
         if (new_source == NULL) {
             fprintf(stderr, "错误: 内存分配失败\n");
             lexer_free();
             return false;
         }
         
-        sprintf(new_source, "输出 %s;", source);
+        snprintf(new_source, total_len, "%s%s%c", prefix, source, suffix);
         
         // 使用新的源代码重新进行词法分析
         lexer_free();
