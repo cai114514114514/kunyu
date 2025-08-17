@@ -3,6 +3,7 @@
  * 实现基本的对象类型和内存管理
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include <stdio.h>
 #include <stdlib.h>

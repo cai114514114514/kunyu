@@ -3,6 +3,7 @@
  * 将源代码转换为标记流
  */
 
+#define _GNU_SOURCE
 #include "../includes/kunyu.h"
 #include <ctype.h>
 #include <stdlib.h>
