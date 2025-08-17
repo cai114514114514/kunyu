@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -128,14 +129,16 @@ static bool execute_and_print(const char *source) {
     // 如果是表达式，添加输出语句
     if (is_expression) {
         // 创建新的源代码，添加输出语句
-        char *new_source = (char *)malloc(strlen(source) + 10);
+        // 正确计算所需缓冲区大小："输出 " + source + ";" + null terminator
+        size_t new_source_len = strlen("输出 ") + strlen(source) + strlen(";") + 1;
+        char *new_source = (char *)malloc(new_source_len);
         if (new_source == NULL) {
             fprintf(stderr, "错误: 内存分配失败\n");
             lexer_free();
             return false;
         }
         
-        sprintf(new_source, "输出 %s;", source);
+        snprintf(new_source, new_source_len, "输出 %s;", source);
         
         // 使用新的源代码重新进行词法分析
         lexer_free();

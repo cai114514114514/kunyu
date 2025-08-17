@@ -9,6 +9,19 @@
 #include <string.h>
 #include <stdbool.h>
 
+// 为了兼容C99标准，定义strdup函数（如果不存在）
+#ifndef _GNU_SOURCE
+static char *kunyu_strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *dup = malloc(len);
+    if (dup) {
+        memcpy(dup, s, len);
+    }
+    return dup;
+}
+#define strdup kunyu_strdup
+#endif
+
 /**
  * 关键字表
  */
@@ -142,6 +155,14 @@ static void advance() {
 static bool add_token(KunyuTokenType type, const char *value, int line, int column) {
     // 如果标记数组满了，则扩容
     if (lexer.token_count >= lexer.token_capacity) {
+        // 防止整数溢出
+        if (lexer.token_capacity > SIZE_MAX / 2) {
+            lexer.error.code = KUNYU_ERROR_MEMORY;
+            snprintf(lexer.error.message, sizeof(lexer.error.message), 
+                     "标记数组太大，无法扩容");
+            return false;
+        }
+        
         size_t new_capacity = lexer.token_capacity * 2;
         Token *new_tokens = (Token*)realloc(lexer.tokens, sizeof(Token) * new_capacity);
         if (new_tokens == NULL) {
