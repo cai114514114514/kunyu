@@ -11,7 +11,7 @@
 
 // 内置函数表
 typedef struct BuiltinFunc {
-    const char *name;              // 函数名
+    char *name;              // 函数名
     PyObject* (*func)(PyObject **args, int arg_count);  // 函数指针
     int arg_count;                 // 参数数量
     struct BuiltinFunc *next;      // 下一个函数
@@ -30,6 +30,10 @@ static void register_builtin(const char *name, PyObject* (*func)(PyObject **args
     }
     
     new_func->name = strdup(name);
+    if (new_func->name == NULL) {
+        free(new_func);
+        return;
+    }
     new_func->func = func;
     new_func->arg_count = arg_count;
     new_func->next = builtin_funcs;
@@ -58,7 +62,7 @@ void builtins_cleanup() {
     BuiltinFunc *func = builtin_funcs;
     while (func != NULL) {
         BuiltinFunc *next = func->next;
-        free((void*)func->name);
+        free(func->name);
         free(func);
         func = next;
     }

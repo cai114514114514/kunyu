@@ -12,6 +12,24 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Portable fallback for strdup in strict C environments */
+#ifndef HAVE_PORTABLE_STRDUP
+static inline char* ky_portable_strdup(const char *s) {
+    if (s == NULL) {
+        return NULL;
+    }
+    size_t len = strlen(s) + 1;
+    char *p = (char*)malloc(len);
+    if (p == NULL) {
+        return NULL;
+    }
+    memcpy(p, s, len);
+    return p;
+}
+#define strdup ky_portable_strdup
+#define HAVE_PORTABLE_STRDUP 1
+#endif
+
 /**
  * 版本信息
  */
@@ -190,6 +208,7 @@ size_t lexer_get_token_count();
  */
 struct AstNode* parser_parse(Token *tokens, size_t token_count);
 void parser_free(struct AstNode *node);
+KunyuError* parser_get_error();
 
 /**
  * 编译器接口

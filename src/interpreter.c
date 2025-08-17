@@ -701,14 +701,21 @@ static PyObject* eval_binary_expr(BinaryExpr *expr) {
         char *left_str = object_to_string(left);
         char *right_str = object_to_string(right);
         
-        size_t result_len = strlen(left_str) + strlen(right_str) + 1;
-        char *result_str = (char *)malloc(result_len);
+        size_t left_len = strlen(left_str);
+        size_t right_len = strlen(right_str);
+        size_t result_len = left_len + right_len;
+        char *result_str = (char *)malloc(result_len + 1);
         
         if (result_str != NULL) {
-            strcpy(result_str, left_str);
-            strcat(result_str, right_str);
+            memcpy(result_str, left_str, left_len);
+            memcpy(result_str + left_len, right_str, right_len);
+            result_str[result_len] = '\0';
             result = create_string_object(result_str);
             free(result_str);
+        } else {
+            interpreter.error.code = KUNYU_ERROR_MEMORY;
+            snprintf(interpreter.error.message, sizeof(interpreter.error.message),
+                     "内存分配失败，无法连接字符串");
         }
         
         free(left_str);
